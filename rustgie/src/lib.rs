@@ -297,17 +297,20 @@ impl RustgieClient {
     ) -> Result<rustgie_types::api_response_::BungieTokenResponse> {
         let mut form = HashMap::<&str, &str>::new();
 
+        let mut oauth_client_id = &String::new();
+        let mut oauth_client_secret = &String::new();
+
         match &self.oauth_client_id {
             None => return Err(anyhow!("OAuth client ID is required")),
             Some(client_id) => {
-                form.insert("client_id", client_id);
+                oauth_client_id = client_id;
             }
         }
 
         match &self.oauth_client_secret {
             None => {}
             Some(client_secret) => {
-                form.insert("client_secret", client_secret);
+                oauth_client_secret = client_secret;
             }
         }
 
@@ -317,6 +320,7 @@ impl RustgieClient {
         self.process_oauth_response(
             self.client
                 .post("https://www.bungie.net/Platform/App/OAuth/Token/")
+                .basic_auth(oauth_client_id, Some(oauth_client_secret))
                 .form(&form),
         )
         .await
@@ -328,17 +332,20 @@ impl RustgieClient {
     ) -> Result<rustgie_types::api_response_::BungieTokenResponse> {
         let mut form = HashMap::<&str, &str>::new();
 
+        let mut oauth_client_id = &String::new();
+        let mut oauth_client_secret = &String::new();
+
         match &self.oauth_client_id {
             None => return Err(anyhow!("OAuth client ID is required")),
             Some(client_id) => {
-                form.insert("client_id", client_id);
+                oauth_client_id = client_id;
             }
         }
 
         match &self.oauth_client_secret {
-            None => return Err(anyhow!("OAuth client secret is required")),
+            None => {}
             Some(client_secret) => {
-                form.insert("client_secret", client_secret);
+                oauth_client_secret = client_secret;
             }
         }
 
@@ -348,6 +355,7 @@ impl RustgieClient {
         self.process_oauth_response(
             self.client
                 .post("https://www.bungie.net/Platform/App/OAuth/Token/")
+                .basic_auth(oauth_client_id, Some(oauth_client_secret))
                 .form(&form),
         )
         .await
