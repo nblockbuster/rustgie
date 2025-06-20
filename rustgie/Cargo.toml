@@ -18,7 +18,7 @@ serde = "1.0"
 time = "0.3"
 
 [features]
-default = ["cookies", "gzip", "native-tls"]
+default = ["cookies", "gzip", "rustls"]
 brotli = ["reqwest/brotli"]
 cookies = ["reqwest/cookies"]
 deflate = ["reqwest/deflate"]
